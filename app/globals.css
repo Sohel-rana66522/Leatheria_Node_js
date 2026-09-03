@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* Design tokens ported 1:1 from Leatheria_Node_js/DESIGN.md ("Artisanal
+   Heritage" design system) — see MIGRATION_PLAN.md addendum for how this
+   was applied on top of the existing Firebase-backed pages. */
+@theme {
+  --color-surface: #fbfbe2;
+  --color-surface-dim: #dbdcc3;
+  --color-surface-bright: #fbfbe2;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f5dc;
+  --color-surface-container: #efefd7;
+  --color-surface-container-high: #eaead1;
+  --color-surface-container-highest: #e4e4cc;
+  --color-on-surface: #1b1d0e;
+  --color-on-surface-variant: #4f453f;
+  --color-inverse-surface: #303221;
+  --color-inverse-on-surface: #f2f2d9;
+  --color-outline: #81756e;
+  --color-outline-variant: #d2c4bc;
+  --color-surface-tint: #705a4c;
+  --color-primary: #26170c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #3d2b1f;
+  --color-on-primary-container: #ac9181;
+  --color-inverse-primary: #dec1af;
+  --color-secondary: #7c5639;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fecaa5;
+  --color-on-secondary-container: #795336;
+  --color-tertiary: #735c00;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #cca72f;
+  --color-on-tertiary-container: #4e3d00;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #fbddca;
+  --color-primary-fixed-dim: #dec1af;
+  --color-secondary-fixed: #ffdcc4;
+  --color-secondary-fixed-dim: #efbc98;
+  --color-tertiary-fixed: #ffe088;
+  --color-tertiary-fixed-dim: #e9c349;
+  --color-background: #fbfbe2;
+  --color-on-background: #1b1d0e;
+  --color-surface-variant: #e4e4cc;
+  --color-ink-charcoal: #333333;
+  --color-paper-white: #ffffff;
+  --color-bronze-accent: #b08d26;
+
+  --font-display: "Playfair Display", serif;
+  --font-body: "Montserrat", sans-serif;
+
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile: 20px;
+  --spacing-section-gap: 120px;
+  --container-container-max: 1280px;
+
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+@layer base {
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  body {
+    @apply bg-surface text-on-surface antialiased;
+    font-family: var(--font-body);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .max-w-container-max {
+    max-width: 1280px;
+  }
+  .px-margin-mobile {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .px-gutter {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .py-section-gap {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+  .pb-section-gap {
+    padding-bottom: 120px;
+  }
+  .pt-section-gap {
+    padding-top: 120px;
+  }
+  @media (min-width: 1024px) {
+    .lg\:px-gutter {
+      padding-left: 64px;
+      padding-right: 64px;
+    }
+  }
+}
+
+/* Checkbox styling matching the mockup's "crisp square" selection indicator */
+.category-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--color-outline-variant);
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.category-checkbox:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.category-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #fff;
+}
+
+.radio-dot {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid var(--color-outline-variant);
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.radio-dot:checked {
+  border-color: var(--color-primary);
+}
+.radio-dot:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 999px;
+}
