@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [banners, products] = await Promise.all([fetchBanners(), fetchAllProducts()]);
-  const heroImage = banners[0]?.link;
+  const heroImage = banners[4]?.link;
 
   return (
     <div className="flex flex-col w-full">

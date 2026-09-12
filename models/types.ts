@@ -88,18 +88,31 @@ export type SortOption = (typeof SORT_OPTIONS)[number];
 
 // Fixed list used by both the checkout city dropdown and the signup/login
 // city dropdown in the Flutter app (identical lists, kept as one here).
-export const CITIES = ["Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet"];
+// Full city list used by the signup/login profile "City" field (unchanged
+// by the checkout delivery-zone feature below — kept exactly as before so
+// existing signup/profile behavior isn't affected).
+export const CITIES = [
+  "Dhaka",
+  "Savar",
+  "Gazipur",
+  "Narayanganj",
+  "Keraniganj",
+  "Chittagong",
+  "Khulna",
+  "Rajshahi",
+  "Sylhet",
+];
 
-export type ShipmentOption = "outside" | "suburban" | "city";
-
-export const SHIPPING_COSTS: Record<ShipmentOption, number> = {
-  outside: 120,
-  suburban: 100,
-  city: 70,
-};
-
-export const SHIPPING_LABELS: Record<ShipmentOption, string> = {
-  outside: "Outside Dhaka: 120৳",
-  suburban: "Dhaka Sub Urban: 100৳",
-  city: "Dhaka City: 70৳",
-};
+// Checkout-only "delivery zone" selector — deliberately a separate list
+// from CITIES above. The checkout City field represents a delivery-fee
+// zone (see lib/delivery.ts), not a free pick of every city; selecting
+// "Outside Dhaka" reveals a free-text district field in the checkout page
+// instead of listing every possible district here.
+export const CHECKOUT_DELIVERY_ZONE_OPTIONS = [
+  "Dhaka",
+  "Savar",
+  "Gazipur",
+  "Narayanganj",
+  "Keraniganj",
+  "Outside Dhaka",
+];

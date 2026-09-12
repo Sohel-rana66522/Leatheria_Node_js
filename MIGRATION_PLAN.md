@@ -47,3 +47,52 @@ data doesn't have:**
   it a real feature rather than decorative chrome, without altering any
   existing search logic (it just seeds the same client-side search state
   Phase 5.3 already documents).
+
+---
+
+## Addendum 2 — Checkout auto-fill for logged-in users
+
+Added: when `/order_checkout` loads and a customer is already logged in
+(`AuthContext.isAuth`), the Full Name, Phone, Email, City, and Address
+fields are pre-filled from that customer's existing profile.
+
+**Data source (the actual one found in this project — not Firebase
+Authentication, which this app doesn't use; see §5.6 above):**
+
+```text
+AuthContext.user  (already a full UserProfile: name, phone, email, city, address)
+       ↓
+comes from the existing `users/{name+phone}` Firestore document
+(via checkExistingUser / login / signup / checkout-account-creation —
+all of which already read or write this same document)
+       ↓
+Checkout form fields
+```
+
+No new fetch, collection, or document shape was introduced — `AuthContext`
+already held the complete profile object; the only change was reading it
+into the checkout form's existing `name`/`phone`/`email`/`city`/`address`
+state on mount.
+
+**Files changed:** `app/order_checkout/page.tsx` only.
+- Added a `touchedRef` (one boolean per field) set on that field's existing
+  `onChange`, so autofill never overwrites something the customer already
+  typed — including if they start typing during the brief window before the
+  autofill effect runs.
+- Added one `useEffect` that fills any untouched, currently-empty field from
+  `user` the first time a given logged-in user's data becomes available,
+  guarded so it doesn't re-run on unrelated re-renders.
+- No JSX/markup, styling, or Tailwind classes changed — every input still
+  renders exactly as it did before; only its initial value can now come
+  from `user` instead of always starting blank.
+
+**Important discrepancy worth flagging:** because `AuthContext` is
+deliberately NOT persisted across a page refresh (a decision documented in
+§5.6, made to match the original Flutter app's own in-memory-only "login"
+behavior), refreshing the checkout page while logged in logs the customer
+out again, same as it always has — the autofill won't reappear after a
+refresh, because from the app's point of view nobody is logged in anymore
+after a refresh. That's existing behavior, not something this change
+altered; making autofill survive a refresh would require adding session
+persistence to `AuthContext`, which is a separate decision outside this
+task's scope (see §7, open decision #3).

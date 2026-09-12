@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { CartItem, ShipmentOption } from "@/models/types";
-import { SHIPPING_COSTS } from "@/models/types";
+import type { CartItem } from "@/models/types";
 
 const STORAGE_KEY = "leatheria.cart.v1";
 
@@ -10,22 +9,17 @@ interface CartContextValue {
   items: CartItem[];
   itemCount: number;
   totalAmount: number;
-  shipmentOption: ShipmentOption;
-  shippingCost: number;
-  totalWithShipping: number;
   addItem: (id: string, name: string, price: number, imageUrl: string) => void;
   addItemWithQuantity: (id: string, name: string, price: number, imageUrl: string, quantity: number) => void;
   removeItem: (id: string) => void;
   removeSingleItem: (id: string) => void;
   clearCart: () => void;
-  setShipmentOption: (option: ShipmentOption) => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [shipmentOption, setShipmentOptionState] = useState<ShipmentOption>("outside");
   const [hydrated, setHydrated] = useState(false);
 
   // Load from localStorage on mount. This is a deliberate, flagged
@@ -89,21 +83,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalAmount = useMemo(() => items.reduce((sum, i) => sum + i.price * i.quantity, 0), [items]);
-  const shippingCost = SHIPPING_COSTS[shipmentOption];
 
   const value: CartContextValue = {
     items,
     itemCount: items.length,
     totalAmount,
-    shipmentOption,
-    shippingCost,
-    totalWithShipping: totalAmount + shippingCost,
     addItem,
     addItemWithQuantity,
     removeItem,
     removeSingleItem,
     clearCart,
-    setShipmentOption: setShipmentOptionState,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

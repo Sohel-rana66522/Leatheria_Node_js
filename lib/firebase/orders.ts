@@ -1,5 +1,6 @@
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { getDb } from "./client";
+import { getDeliveryFee } from "@/lib/delivery";
 import type { CartItem, Order } from "@/models/types";
 
 const ORDERS_COLLECTION = "orders";
@@ -9,10 +10,29 @@ export interface PlaceOrderInput {
   name: string;
   phone: string;
   email: string;
+  // Actual delivery destination to persist on the order (and, from the
+  // checkout page, on the customer's profile) — e.g. "Dhaka", "Savar", or,
+  // when the "Outside Dhaka" zone was picked, the customer's typed district
+  // (e.g. "Chittagong"), never the literal string "Outside Dhaka" unless
+  // they left the district blank. This is what the existing Order/UserModel
+  // `city` field has always meant: the real destination city.
   city: string;
+  // The delivery-fee ZONE the customer selected in the checkout dropdown
+  // (one of CHECKOUT_DELIVERY_ZONE_OPTIONS in models/types.ts — "Dhaka",
+  // "Savar", "Gazipur", "Narayanganj", "Keraniganj", or "Outside Dhaka").
+  // Kept separate from `city` on purpose: the fee only depends on which
+  // zone was picked, never on the free-text district typed for "Outside
+  // Dhaka", so a customer can't affect their delivery fee by what they type
+  // in that field.
+  deliveryZone: string;
   address: string;
   items: CartItem[];
-  totalAmount: number; // product subtotal + shipping, matches OrderModel.totalAmount
+  // NOTE: no `totalAmount` field here — see below. Trusting a number the
+  // browser sends for the amount to charge/record would let a customer
+  // edit that value before submitting; the total is computed inside
+  // placeOrder() itself instead, from `items` and `deliveryZone`, so this
+  // function is the trusted point that produces the final amount, not a
+  // passthrough of whatever the client calculated for display purposes.
 }
 
 /**
@@ -20,8 +40,18 @@ export interface PlaceOrderInput {
  * `id` FIELD inside the document is name+phone (the same convention as the
  * `users` doc ID) and is what "my orders" is queried by. Matches
  * OrderModel.toMap() in the Flutter app exactly. See MIGRATION_PLAN.md §5.5.
+ *
+ * `totalAmount` = product subtotal (recomputed here from `items`, not
+ * trusted from the caller) + delivery fee (resolved here from
+ * `deliveryZone`, not from `city` — see PlaceOrderInput above — via the
+ * same lib/delivery.ts config the checkout UI uses for its live display) —
+ * see MIGRATION_PLAN.md addendum on automatic delivery fees.
  */
 export async function placeOrder(input: PlaceOrderInput): Promise<string> {
+  const subtotal = input.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const { fee: deliveryFee } = getDeliveryFee(input.deliveryZone);
+  const totalAmount = subtotal + deliveryFee;
+
   const docRef = await addDoc(collection(getDb(), ORDERS_COLLECTION), {
     id: input.key,
     name: input.name,
@@ -37,7 +67,7 @@ export async function placeOrder(input: PlaceOrderInput): Promise<string> {
       imageUrl: item.imageUrl,
       quantity: item.quantity,
     })),
-    totalAmount: input.totalAmount,
+    totalAmount,
     createdAt: Timestamp.now(),
   });
   return docRef.id;

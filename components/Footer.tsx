@@ -11,9 +11,6 @@ const SHOP_LINKS = [
   { href: "/productsList/All", label: "Categories" },
   { href: "/productsList/All", label: "All Products" },
   { href: "/productsList/Bags", label: "Bags" },
-  { href: "/productsList/Belts", label: "Belts" },
-  { href: "/productsList/Wallets", label: "Wallets" },
-  { href: "/productsList/Long Wallets", label: "Long Wallets" },
 ];
 
 const CUSTOMER_LINKS = [

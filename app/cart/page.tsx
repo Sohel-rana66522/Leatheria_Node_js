@@ -80,7 +80,7 @@ export default function CartPage() {
               <span>{totalAmount}&#2547;</span>
             </div>
             <div className="flex justify-between text-body-md text-on-surface-variant mb-3">
-              <span>Shipping</span>
+              <span>Delivery Fee</span>
               <span>Calculated at checkout</span>
             </div>
             <div className="w-full h-px bg-outline-variant/30 my-4" />
