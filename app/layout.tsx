@@ -51,6 +51,9 @@ export const metadata: Metadata = {
       "Shop premium handcrafted leather bags, wallets, men's belt, sweat leather, full grain leather and accessories at Leatheria. Fast delivery, quality guaranteed.",
     images: ["/icons/og-image.png"],
   },
+ verification: {
+    google: "x2Rxp72KbZpDxOxYNctR04q_ZeOn1YuT64sf1G3eEkU",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
