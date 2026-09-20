@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://leatheria.web.app";
+const SITE_URL = "https://leatheria.vercel.app";
 
 export default function robots(): MetadataRoute.Robots {
   return {

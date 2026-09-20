@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { fetchAllProducts } from "@/lib/firebase/products";
 import { CATEGORIES } from "@/models/types";
 
-const SITE_URL = "https://leatheria.web.app";
+const SITE_URL = "https://leatheria.vercel.app";
 
 // Dynamic — regenerated from the live OurProducts collection on every
 // crawl, unlike the original static web/sitemap.xml, which listed only the
