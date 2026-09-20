@@ -54,7 +54,7 @@ export default async function ProductDetailPage({ params }: Props) {
         product.availability === "stock_out"
           ? "https://schema.org/OutOfStock"
           : "https://schema.org/InStock",
-      url: `https://leatheria.web.app/product/${product.id}`,
+      url: `https://leatheria.vercel.app/product/${product.id}`,
     },
   };
 

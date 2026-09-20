@@ -5,7 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-const SITE_URL = "https://leatheria.web.app";
+const SITE_URL = "https://leatheria.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

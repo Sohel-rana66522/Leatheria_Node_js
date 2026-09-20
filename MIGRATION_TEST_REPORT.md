@@ -54,7 +54,7 @@ distinct error state on fetch failure (see MIGRATION_PLAN.md §5.7).
 ## Known gaps / things I did NOT do
 
 - **No visual screenshot comparison** was performed against the live Flutter
-  site (`https://leatheria.web.app`) — I don't have a way to render Flutter
+  site (`https://leatheria.vercel.app`) — I don't have a way to render Flutter
   Web in this sandbox to compare pixel-for-pixel, and the live product data
   is needed to compare product cards/detail pages meaningfully anyway.
 - **Firestore security rules were not available to me** (not in the repo).
